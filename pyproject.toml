@@ -22,13 +22,18 @@ description = "PWA generator for reading comics and web novels"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "playwright>=1.40.0",
     "aiofiles>=23.0.0",
     "aiohttp>=3.9.0",
     "beautifulsoup4>=4.12.0",
     "rich>=13.0.0",
     "pydantic>=2.0.0",
     "typer[all]>=0.9.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+full = [
+    "playwright>=1.40.0",
 ]
 
 
@@ -63,7 +68,7 @@ select = [
     "ARG",  # flake8-unused-arguments
     "D",    # pydocstyle (docstring conventions)
 ]
-ignore = ["E501", "S101"]  # line too long (handled by formatter), assert in tests
+ignore = ["E501", "S101", "SLF001"]  # line too long (handled by formatter), assert in tests, private member access in tests
 
 [tool.ruff.lint.isort]
 known-first-party = ["pgfr"]

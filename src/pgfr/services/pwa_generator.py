@@ -17,6 +17,20 @@ from rich.console import Console
 
 from .content_optimizer import ContentOptimizer
 
+# Import compatibility layer
+try:
+    from ..compat.pwa_generator import TermuxPWAGenerator
+    from ..compat.termux import is_termux
+
+    TERMUX_AVAILABLE = True
+except ImportError:
+    TERMUX_AVAILABLE = False
+
+    def is_termux() -> bool:
+        """Fallback function when Termux compatibility unavailable."""
+        return False
+
+
 HTTP_OK = 200
 SHORT_NAME_MAX = 12
 console = Console()
@@ -27,7 +41,17 @@ class PWAGeneratorError(Exception):
 
 
 class PWAGenerator:
-    """Generate PWA from website."""
+    """Generate PWA from website with environment compatibility."""
+
+    def __new__(cls, *_args: Any, **_kwargs: Any) -> Any:
+        """Create appropriate generator based on environment."""
+        if TERMUX_AVAILABLE and is_termux():
+            console.print(
+                "[yellow]🤖 Detected Termux environment - "
+                "using compatibility mode[/yellow]"
+            )
+            return TermuxPWAGenerator()
+        return super().__new__(cls)
 
     async def generate(self, url: str, output_dir: Path) -> None:
         """Generate PWA files."""

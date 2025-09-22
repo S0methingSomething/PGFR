@@ -1,8 +1,7 @@
 """Tests for PWA generator."""
 
 import json
-from pathlib import Path
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -32,7 +31,7 @@ class TestPWAGenerator:
         site_info = {
             "name": "Test App",
             "short_name": "Test",
-            "description": "Test description"
+            "description": "Test description",
         }
 
         await pwa_generator._generate_manifest(site_info, "icon.png", temp_output_dir)
@@ -46,7 +45,8 @@ class TestPWAGenerator:
         assert manifest["name"] == "Test App"
         assert manifest["short_name"] == "Test"
         assert manifest["display"] == "fullscreen"
-        assert len(manifest["icons"]) == 2
+        expected_icons = 2
+        assert len(manifest["icons"]) == expected_icons
 
     @pytest.mark.asyncio
     async def test_generate_service_worker(self, pwa_generator, temp_output_dir):
@@ -81,19 +81,23 @@ class TestPWAGenerator:
         assert isinstance(error, Exception)
 
     @pytest.mark.asyncio
-    async def test_generate_html_with_mock_optimizer(self, pwa_generator, temp_output_dir):
+    async def test_generate_html_with_mock_optimizer(
+        self, pwa_generator, temp_output_dir
+    ):
         """Test HTML generation with mocked optimizer."""
         site_info = {
             "name": "Test App",
             "short_name": "Test",
-            "description": "Test description"
+            "description": "Test description",
         }
 
-        with patch("pgfr.services.pwa_generator.ContentOptimizer") as mock_optimizer_class:
+        with patch(
+            "pgfr.services.pwa_generator.ContentOptimizer"
+        ) as mock_optimizer_class:
             mock_optimizer = AsyncMock()
             mock_optimizer.optimize_site.return_value = {
                 "preloaded_pages": 2,
-                "optimized_images": 5
+                "optimized_images": 5,
             }
             mock_optimizer_class.return_value = mock_optimizer
 

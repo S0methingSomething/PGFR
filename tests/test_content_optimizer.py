@@ -1,7 +1,5 @@
 """Tests for content optimizer."""
 
-from pathlib import Path
-
 import pytest
 
 from pgfr.services.content_optimizer import ContentOptimizer
@@ -52,8 +50,9 @@ class TestContentOptimizer:
             "https://example.com", mock_html
         )
 
+        max_links = 5
         # Should find internal links, prioritize reading-related ones
-        assert len(result) <= 5  # Limited to 5
+        assert len(result) <= max_links  # Limited to 5
         assert any("next-page" in link for link in result)
         assert any("prev-page" in link for link in result)
         # External links should be filtered out
@@ -66,7 +65,9 @@ class TestContentOptimizer:
         assert result == ""
 
     @pytest.mark.asyncio
-    async def test_optimize_single_image_no_session(self, content_optimizer, temp_output_dir):
+    async def test_optimize_single_image_no_session(
+        self, content_optimizer, temp_output_dir
+    ):
         """Test single image optimization without session."""
         result = await content_optimizer._optimize_single_image(
             "https://example.com/image.jpg", temp_output_dir
@@ -74,7 +75,9 @@ class TestContentOptimizer:
         assert result == {}
 
     @pytest.mark.asyncio
-    async def test_generate_optimized_content_basic(self, content_optimizer, temp_output_dir):
+    async def test_generate_optimized_content_basic(
+        self, content_optimizer, temp_output_dir
+    ):
         """Test basic optimized content generation."""
         result = await content_optimizer._generate_optimized_content(
             "main content", [], temp_output_dir
