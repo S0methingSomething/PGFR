@@ -32,6 +32,13 @@ def generate(
     ),
 ) -> None:
     """Generate PWA from website URL."""
+    asyncio.run(_generate_wrapper(url, output_dir, port, interactive))
+
+
+async def _generate_wrapper(
+    url: str | None, output_dir: str | None, port: int | None, interactive: bool
+) -> None:
+    """Async wrapper for generate command."""
     if interactive:
         asyncio.run(_interactive_generate(url, output_dir, port))
     else:
@@ -59,7 +66,7 @@ async def _interactive_generate(
             "[bold cyan]Enter website URL[/bold cyan]", default="https://example.com"
         )
 
-    if not url.startswith(("http://", "https://")):
+    if url and not url.startswith(("http://", "https://")):
         url = f"https://{url}"
 
     # Get output directory
@@ -87,7 +94,8 @@ async def _interactive_generate(
         console.print("[yellow]Cancelled[/yellow]")
         return
 
-    await _generate(url, Path(output_dir), port)
+    if url:
+        await _generate(url, Path(output_dir or "./pwa"), port or 8080)
 
 
 async def _generate(url: str, output_dir: Path, port: int) -> None:

@@ -1,6 +1,6 @@
 """Tests for CLI functionality."""
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 
 import pytest
 from typer.testing import CliRunner
@@ -25,10 +25,10 @@ class TestCLI:
         assert "PGFR - PWA Generator for Reading" in result.stdout
         assert "Features:" in result.stdout
 
-    @patch("pgfr.cli.main._generate")
+    @patch("pgfr.cli.main._generate_wrapper")
     def test_generate_command_non_interactive(self, mock_generate, cli_runner):
         """Test generate command in non-interactive mode."""
-        mock_generate.return_value = AsyncMock()
+        mock_generate.return_value = None
 
         result = cli_runner.invoke(
             app,
@@ -52,10 +52,10 @@ class TestCLI:
         assert result.exit_code == 1
         assert "Error: URL is required in non-interactive mode" in result.stdout
 
-    @patch("pgfr.cli.main._interactive_generate")
+    @patch("pgfr.cli.main._generate_wrapper")
     def test_generate_command_interactive(self, mock_interactive, cli_runner):
         """Test generate command in interactive mode."""
-        mock_interactive.return_value = AsyncMock()
+        mock_interactive.return_value = None
 
         result = cli_runner.invoke(app, ["generate", "--interactive"])
 

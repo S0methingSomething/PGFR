@@ -5,34 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>httpbin.org</title>
     <meta name="description" content="Reading app">
-    
+
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2196F3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="httpbin.org">
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             overflow: hidden;
         }
-        
+
         #frame {
             width: 100vw;
             height: 100vh;
             border: none;
             background: #fff;
         }
-        
+
         .loading {
             position: fixed;
             top: 50%;
@@ -42,7 +42,7 @@
             text-align: center;
             z-index: 1000;
         }
-        
+
         .loading-spinner {
             width: 30px;
             height: 30px;
@@ -52,12 +52,12 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 12px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .info {
             position: fixed;
             bottom: 10px;
@@ -76,34 +76,34 @@
         <div class="loading-spinner"></div>
         <div>Loading httpbin.org...</div>
     </div>
-    
+
     <div class="info" id="info" style="display: none;">
         Termux Mode: 0 pages
     </div>
-    
+
     <iframe id="frame" src="https://httpbin.org/html" style="display:none"></iframe>
-    
+
     <script>
         // Register service worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .catch(err => console.log('SW registration failed'));
         }
-        
+
         const frame = document.getElementById('frame');
         const loading = document.getElementById('loading');
         const info = document.getElementById('info');
-        
+
         let loadTimeout = setTimeout(() => {
             loading.innerHTML = '<div>Connection timeout. Tap to retry.</div>';
             loading.onclick = () => location.reload();
         }, 10000);
-        
+
         frame.onload = () => {
             clearTimeout(loadTimeout);
             loading.style.display = 'none';
             frame.style.display = 'block';
-            
+
             // Show info briefly
             info.style.display = 'block';
             setTimeout(() => {
