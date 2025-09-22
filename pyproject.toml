@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pre-commit>=3.0.0",
+    "tox>=4.0.0",
+    "types-aiofiles>=24.1.0.20250822",
+]
+
+
+
+[project]
+name = "pgfr"
+version = "0.1.0"
+description = "PWA generator for reading comics and web novels"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "playwright>=1.40.0",
+    "aiofiles>=23.0.0",
+    "aiohttp>=3.9.0",
+    "beautifulsoup4>=4.12.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "typer[all]>=0.9.0",
+]
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "C90",  # mccabe complexity
+    "B",    # flake8-bugbear
+    "Q",    # flake8-quotes
+    "T20",  # flake8-print
+    "SIM",  # flake8-simplify
+    "PT",   # flake8-pytest-style
+    "RET",  # flake8-return
+    "PTH",  # flake8-use-pathlib
+    "RUF",  # Ruff-specific rules
+    "UP",   # pyupgrade (modern Python features)
+    "N",    # pep8-naming
+    "S",    # flake8-bandit (security)
+    "A",    # flake8-builtins (builtin shadowing)
+    "C4",   # flake8-comprehensions
+    "PIE",  # flake8-pie (misc improvements)
+    "PL",   # pylint
+    "PERF", # perflint (performance)
+    "SLF",  # flake8-self
+    "ARG",  # flake8-unused-arguments
+    "D",    # pydocstyle (docstring conventions)
+]
+ignore = ["E501", "S101"]  # line too long (handled by formatter), assert in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["pgfr"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+packages = ["pgfr"]
+namespace_packages = true
+
+[project.scripts]
+pgfr = "pgfr.cli.main:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pgfr"]
