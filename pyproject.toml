@@ -87,7 +87,7 @@ packages = ["pgfr"]
 namespace_packages = true
 
 [project.scripts]
-pgfr = "pgfr.cli.main:app"
+pgfr = "pgfr.cli.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
