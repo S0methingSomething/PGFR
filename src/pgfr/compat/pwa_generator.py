@@ -30,6 +30,10 @@ class TermuxPWAGenerator:
     def __init__(self) -> None:
         """Initialize Termux PWA generator."""
 
+    async def generate_pwa(self, url: str, output_dir: Path, port: int) -> None:  # noqa: ARG002
+        """Generate PWA files for Termux."""
+        await self.generate(url, output_dir)
+
     async def generate(self, url: str, output_dir: Path) -> None:
         """Generate PWA files for Termux."""
         try:
